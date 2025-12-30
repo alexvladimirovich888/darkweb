@@ -16,9 +16,17 @@ const AppContent: React.FC = () => {
   const { isModalOpen, setIsModalOpen, connect } = useWallet();
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black flex flex-col">
+    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black flex flex-col relative overflow-hidden">
+      {/* GLOBAL INTERFERENCE BACKGROUND */}
+      <div className="interference-overlay">
+        <div className="noise" />
+        <div className="flicker" />
+        <div className="vignette" />
+        <div className="scanline-effect" />
+      </div>
+
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 z-10">
         <AnimatePresence mode="wait">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -31,7 +39,7 @@ const AppContent: React.FC = () => {
         </AnimatePresence>
       </main>
       
-      <footer className="border-t border-[#1A1A1A] p-6 text-center text-[10px] text-[#222] font-mono tracking-widest mt-auto">
+      <footer className="border-t border-[#1A1A1A] p-6 text-center text-[10px] text-[#222] font-mono tracking-widest mt-auto z-10">
         SYSTEM_STATUS: NOMINAL // VERSION_HASH: 0xDARK_POCKET_BETA // SURVEILLANCE: ACTIVE
       </footer>
 
