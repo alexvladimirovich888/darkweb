@@ -31,17 +31,20 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const toggleModal = useCallback(() => setIsModalOpen(prev => !prev), []);
+  const toggleModal = useCallback(() => {
+    setIsModalOpen(prev => !prev);
+  }, []);
 
   const connect = async () => {
     try {
-      // @ts-ignore - Phantom injection
+      // @ts-ignore - Phantom injection detection
       const { solana } = window;
       
       if (solana?.isPhantom) {
         const response = await solana.connect();
         const pubKey = response.publicKey.toString();
         
+        // Mock institutional balance check
         const charSum = pubKey.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
         const mockBalance = (charSum % 10) > 3 ? 150000 : 25000; 
 
@@ -53,10 +56,10 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         });
         setIsModalOpen(false);
       } else {
-        console.warn('Phantom not detected');
+        console.warn('Uplink failed: Phantom provider not detected.');
       }
     } catch (err) {
-      console.error('Wallet connection failed:', err);
+      console.error('Handshake failed:', err);
     }
   };
 
@@ -69,7 +72,6 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     });
   }, []);
 
-  // Use React.createElement to avoid JSX parsing issues in a .ts file
   return React.createElement(
     WalletContext.Provider,
     {
